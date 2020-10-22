@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\Food;
 use Illuminate\Http\Request;
 use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
@@ -57,7 +58,7 @@ class FoodController extends Controller
             }
 
 
-            return ResponseFormatter::success($food->paginate($limit),'Data list [roduk berhasil diambil');
+            return ResponseFormatter::success($food->paginate($limit),'Data list produk berhasil diambil');
         }
     }
 }
