@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\API;
 
+use Exception;
 use App\Models\Transactions;
 use Illuminate\Http\Request;
 use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Midtrans\Config;
+use Midtrans\Snap;
 
 class TransactionController extends Controller
 {
@@ -39,7 +42,7 @@ class TransactionController extends Controller
                 $transaction->where('status',$status);
             }
 
-            return ResponseFormatter::success($food->paginate($limit),'Data list transaksi berhasil diambil');
+            return ResponseFormatter::success($transaction->paginate($limit),'Data list transaksi berhasil diambil');
     }
 
     public function update(Request $request, $id){
@@ -71,7 +74,7 @@ class TransactionController extends Controller
         //konfigurasi midtrans
         Config::$serverKey = config('services.midtrans.serverKey');
         Config::$isProduction = config('services.midtrans.isProduction');
-        Config::$isSanizited = config('services.midtrans.isSanizited');
+        Config::$isSanitized = config('services.midtrans.isSanizited');
         Config::$is3ds = config('services.midtrans.is3ds');
 
         //panggil transaksi yg sudah dibuat
