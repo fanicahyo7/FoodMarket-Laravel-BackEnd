@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Food;
+use App\Models\Transactions;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\FoodRequest;
 
-class FoodController extends Controller
+class TransactionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,10 +15,10 @@ class FoodController extends Controller
      */
     public function index()
     {
-        $food = Food::paginate(10);
+        $transaction = Transactions::with(['user','food'])->paginate(10);
 
-        return view('food.index',[
-            'food' => $food
+        return view('transactions.index',[
+            'transaction' => $transaction
         ]);
     }
 
@@ -30,7 +29,7 @@ class FoodController extends Controller
      */
     public function create()
     {
-        return view('food.create');
+        //
     }
 
     /**
@@ -39,15 +38,9 @@ class FoodController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(FoodRequest $request)
+    public function store(Request $request)
     {
-        $data =$request->all();
-
-        $data['picturePath'] = $request->file('picturePath')->store('assets/food', 'public');
-
-        Food::create($data);
-
-        return redirect()->route('food.index');
+        //
     }
 
     /**
@@ -56,9 +49,11 @@ class FoodController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Food $food)
+    public function show(Transactions $transaction)
     {
-        //
+        return view('transactions.detail',[
+            'item' => $transaction
+        ]);
     }
 
     /**
@@ -67,11 +62,9 @@ class FoodController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Food $food)
+    public function edit($id)
     {
-        return view('food.edit',[
-            'item' => $food
-        ]);
+        //
     }
 
     /**
@@ -81,17 +74,9 @@ class FoodController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(FoodRequest $request, Food $food)
+    public function update(Request $request, $id)
     {
-        $data =$request->all();
-
-        if($request->file('picturePath')){
-            $data['picturePath'] = $request->file('picturePath')->store('assets/food', 'public');
-        }
-
-        $food->update($data);
-
-        return redirect()->route('food.index');
+        //
     }
 
     /**
@@ -100,10 +85,21 @@ class FoodController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Food $food)
+    public function destroy(Transactions $transaction)
     {
-        $food->delete();
+        $transaction->delete();
 
-        return redirect()->route('food.index');
+        return redirect()->route('transactions.index');
     }
+
+    public function changeStatus(Request $request, $id, $status)
+    {
+        $transaction = Transactions::findOrFail($id);
+
+        $transaction->status = $status;
+        $transaction->save();
+
+        return redirect()->route('transactions.show', $id);
+    }
+
 }
