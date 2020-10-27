@@ -32,7 +32,7 @@ class FoodController extends Controller
             else{
                 return ResponseFormatter::error(null,'data produk tidak ada',404);
             }
-
+        }
             $food = Food::query();
 
             if($name){
@@ -58,7 +58,6 @@ class FoodController extends Controller
             }
 
 
-            return ResponseFormatter::success($food->paginate($limit),'Data list produk berhasil diambil');
-        }
+        return ResponseFormatter::success($food->paginate($limit),'Data list produk berhasil diambil');
     }
 }
