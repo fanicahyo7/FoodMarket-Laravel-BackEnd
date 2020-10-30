@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Transactions;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -15,7 +15,7 @@ class TransactionController extends Controller
      */
     public function index()
     {
-        $transaction = Transactions::with(['user','food'])->paginate(10);
+        $transaction = Transaction::with(['user','food'])->paginate(10);
 
         return view('transactions.index',[
             'transaction' => $transaction
@@ -49,7 +49,7 @@ class TransactionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Transactions $transaction)
+    public function show(Transaction $transaction)
     {
         return view('transactions.detail',[
             'item' => $transaction
@@ -85,7 +85,7 @@ class TransactionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Transactions $transaction)
+    public function destroy(Transaction $transaction)
     {
         $transaction->delete();
 
@@ -94,7 +94,7 @@ class TransactionController extends Controller
 
     public function changeStatus(Request $request, $id, $status)
     {
-        $transaction = Transactions::findOrFail($id);
+        $transaction = Transaction::findOrFail($id);
 
         $transaction->status = $status;
         $transaction->save();

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use Exception;
-use App\Models\Transactions;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
@@ -22,7 +22,7 @@ class TransactionController extends Controller
 
         if($id)
         {
-            $transaction = Transactions::with(['food','user'])->find($id);
+            $transaction = Transaction::with(['food','user'])->find($id);
 
             if($transaction){
                 return ResponseFormatter::success($transaction,'Data transaksi Berhasil terambil');
@@ -32,7 +32,7 @@ class TransactionController extends Controller
             }
         }
 
-        $transaction = Transactions::with(['food','user'])->where('user_id',Auth::user()->id);
+        $transaction = Transaction::with(['food','user'])->where('user_id',Auth::user()->id);
 
             if($food_id){
                 $transaction->where('food_id',$food_id);
@@ -46,7 +46,7 @@ class TransactionController extends Controller
     }
 
     public function update(Request $request, $id){
-        $transaction = Transactions::fingOrFail($id);
+        $transaction = Transaction::findOrFail($id);
 
         $transaction->update($request->all());
 
@@ -62,7 +62,7 @@ class TransactionController extends Controller
             'status' => 'required'
         ]);
 
-        $transaction = Transactions::create([
+        $transaction = Transaction::create([
             'food_id' => $request->food_id,
             'user_id' => $request->user_id,
             'quantity' => $request->quantity,
@@ -78,7 +78,7 @@ class TransactionController extends Controller
         Config::$is3ds = config('services.midtrans.is3ds');
 
         //panggil transaksi yg sudah dibuat
-        $transaction = Transactions::with(['food','user'])->find($transaction->id);
+        $transaction = Transaction::with(['food','user'])->find($transaction->id);
 
         //membuat transaksi midtrans
         $midtrans = [
