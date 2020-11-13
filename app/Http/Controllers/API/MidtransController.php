@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API;
 
 use Midtrans\Config;
 use Midtrans\Notification;
-use App\Models\Transactions;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -27,7 +27,7 @@ class MidtransController extends Controller
         $order_id = $notification->order_id;
 
         // cari transaksi berdasarkan id
-        $transaction = Transactions::fingOrFail($order_id);
+        $transaction = Transaction::findOrFail($order_id);
 
         // handle notifikasi status midtrans
         if($status == 'capture')

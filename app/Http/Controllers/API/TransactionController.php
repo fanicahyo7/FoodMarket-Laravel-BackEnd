@@ -99,7 +99,7 @@ class TransactionController extends Controller
             $paymentUrl = Snap::createTransaction($midtrans)->redirect_url;
 
             $transaction->payment_url = $paymentUrl;
-            $transaction->save();
+            $transaction->update();
 
             return ResponseFormatter::success($transaction,'Transaksi Berhasil');
         }
